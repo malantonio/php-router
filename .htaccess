@@ -1,0 +1,10 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+# allow file/dir requests
+RewriteCond $1 !\.(md|js|css)
+RewriteCond $1 !-f
+RewriteCond $1 !-d
+RewriteCond $1 !(/?js|css|static/?)
+
+RewriteRule (.*) index.php
