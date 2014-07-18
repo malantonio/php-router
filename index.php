@@ -1,16 +1,8 @@
 <?php
-function route($path, $callback = null) {
-    $req = preg_replace("|" . basename(__DIR__) . "/?|", "", $_SERVER['REQUEST_URI']);
-    $path = preg_replace("|:(\w+)|", "(\\w+)", $path);
-    $querystring_reg = "(?:(\?\w+\=[\w&=-]*))?";
+require_once "router.php";
 
-    $regex = "|^" . $path . $querystring_reg . "$|";
-
-    if ( preg_match($regex, $req, $matches) ) {
-        array_shift($matches);
-        return $callback && call_user_func_array($callback, $matches); 
-    } else {
-        return false; 
-    }
-}
+route("/", function() { echo "OH HAI FRONT PAGE"; });
+route("/admin", function() { echo "IS U ADD MIN?"; });
+route("/:thing/:id", "POST", function($thing, $id) { echo "POST'D THING ({$thing}) AND ID ({$id})\n"; });
+route("/:thing/:id", "PUT", function($thing, $id) { echo "PUT'D THING ({$thing}) AND ID ({$id})\n"; });
 ?>
