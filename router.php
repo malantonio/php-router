@@ -6,7 +6,7 @@ function route($path, $method, $callback = null) {
     }
 
     $req = preg_replace("|" . basename(__DIR__) . "/?|", "", $_SERVER['REQUEST_URI']);
-    $path = preg_replace("|:(\w+)|", "(\\w+)", $path);
+    $path = preg_replace("|:(\w+)|", "([\\w%]+)", $path);
     $querystring_reg = "(?:(\?\w+\=[\w&=-]*))?";
 
     $regex = "|^" . $path . $querystring_reg . "$|";
@@ -18,4 +18,21 @@ function route($path, $method, $callback = null) {
         return false; 
     }
 }
+
+function delete($path, $callback = null) {
+    return route($path, "DELETE", $callback);
+}
+
+function get($path, $callback = null) {
+    return route($path, "GET", $callback);
+}
+
+function post($path, $callback = null) {
+    return route($path, "POST", $callback);
+}
+
+function put($path, $callback = null) {
+    return route($path, "PUT", $callback);
+}
+
 ?>
