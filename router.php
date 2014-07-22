@@ -5,11 +5,14 @@ function route($path, $method, $callback = null) {
         $method = "GET";
     }
 
-    $req = preg_replace("|" . basename(__DIR__) . "/?|", "", $_SERVER['REQUEST_URI']);
-    $path = preg_replace("|:(\w+)|", "([\\w%]+)", $path);
-    $querystring_reg = "(?:(\?\w+\=[\w&=-]*))?";
+    $bn = basename(__DIR__);
+    $replace_preg = "|^/" . $bn . "|";
 
-    $regex = "|^" . $path . $querystring_reg . "$|";
+    $req = preg_replace($replace_preg, "", $_SERVER['REQUEST_URI']);
+    $path = preg_replace("|:(\w+)|", "([\\w%\+]+)", $path);
+    $querystring_reg = "(?:(\?\w+\=[\w&=\-%\+]*))?";
+
+    $regex = "|^" . $path . "/?" . $querystring_reg . "$|";
 
     if ( preg_match($regex, $req, $matches) && $_SERVER['REQUEST_METHOD'] == $method ) {
         array_shift($matches);
